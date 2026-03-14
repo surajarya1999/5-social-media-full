@@ -16,22 +16,25 @@ function parseUserAgent(userAgent) {
   }
 
   const isChrome = browser.toLowerCase().includes("chrome");
-  const isMobile = deviceType === "mobile";
+
+  // Windows/Mac/Linux pe kabhi mobile nahi hoga
+  const isMobile = deviceType === "mobile" &&
+    os !== "Windows" && os !== "Mac OS" && os !== "Linux";
 
   return { browser, os, deviceType, isChrome, isMobile };
 }
 
 function isWithinMobileLoginWindow() {
   const now = new Date();
-  
+
   // IST = UTC + 5:30
   const istOffset = 5.5 * 60 * 60 * 1000;
   const istTime = new Date(now.getTime() + istOffset);
-  
+
   const hours = istTime.getUTCHours();
   const minutes = istTime.getUTCMinutes();
   const totalMinutes = hours * 60 + minutes;
-  
+
   return totalMinutes >= 600 && totalMinutes < 780; // 10:00 AM – 1:00 PM IST
 }
 
