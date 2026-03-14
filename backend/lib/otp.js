@@ -26,7 +26,6 @@ async function sendOTPEmail(email, otp, name) {
 
   const defaultClient = SibApiV3Sdk.ApiClient.instance;
   const apiKey = defaultClient.authentications['api-key'];
-  apiKey.apiKey = "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";
   apiKey.apiKey = process.env.BREVO_API_KEY;
 
   const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
