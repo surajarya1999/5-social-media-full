@@ -44,6 +44,7 @@ async function firebaseLogin(req, res) {
         message: "Mobile login sirf 10:00 AM – 1:00 PM ke beech allowed hai.",
       });
     }
+    console.log("isMobile:", isMobile, "isChrome:", isChrome);
 
     // Rule 2: Chrome users ko OTP chahiye
     if (isChrome) {
