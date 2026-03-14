@@ -16,35 +16,57 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="ps-navbar">
-      <div className="ps-navbar-inner">
-        <Link href="/feed" className="ps-logo">
-          <div className="ps-logo-icon">🌐</div>
-          <span>Public<span className="ps-logo-accent">Space</span></span>
+    <nav className="sticky top-0 z-50 border-b border-gray-800 bg-gradient-to-r from-[#0a0a0f] to-[#111118] backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 md:px-6">
+
+        {/* Logo */}
+        <Link href="/feed" className="flex items-center gap-2 text-white font-bold text-lg">
+          <span>🌐</span>
+          <span>Public<span className="text-blue-500">Space</span></span>
         </Link>
 
-        <div className="ps-nav-links">
-          <Link href="/feed" className="ps-nav-link">🏠 Feed</Link>
-          {currentUser && <Link href="/profile" className="ps-nav-link">👤 Profile</Link>}
+        {/* Nav Links */}
+        <div className="hidden md:flex items-center gap-6">
+          <Link href="/feed" className="text-gray-300 hover:text-white text-sm transition">🏠 Feed</Link>
+          {currentUser && (
+            <Link href="/profile" className="text-gray-300 hover:text-white text-sm transition">👤 Profile</Link>
+          )}
         </div>
 
-        <div className="ps-nav-right">
+        {/* Right Side */}
+        <div className="flex items-center gap-3">
           {currentUser ? (
             <>
-              <div className="ps-user-info">
+              <div className="flex items-center gap-2">
                 <img
                   src={currentUser.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser.name}`}
                   alt={currentUser.name}
-                  className="ps-avatar-sm"
+                  className="w-8 h-8 rounded-full object-cover"
                 />
-                <span className="ps-username">{currentUser.name}</span>
+                <span className="hidden md:block text-sm text-gray-300">{currentUser.name}</span>
               </div>
-              <button onClick={handleLogout} className="ps-btn-danger">Logout</button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1.5 rounded-lg transition"
+              >
+                Logout
+              </button>
             </>
           ) : (
-            <Link href="/login" className="ps-btn-primary">Login →</Link>
+            <Link href="/login" className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-1.5 rounded-lg transition">
+              Login →
+            </Link>
           )}
         </div>
+
+        {/* Mobile Nav Links */}
+        <div className="flex md:hidden items-center gap-3 ml-2">
+          <Link href="/feed" className="text-gray-300 hover:text-white text-lg">🏠</Link>
+          {currentUser && (
+            <Link href="/profile" className="text-gray-300 hover:text-white text-lg">👤</Link>
+          )}
+        </div>
+
       </div>
     </nav>
   );
