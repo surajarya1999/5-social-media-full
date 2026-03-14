@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
-// In-memory OTP store (use Redis in production)
+// In-memory OTP store
 const otpStore = new Map();
 
 function generateOTP() {
@@ -22,23 +22,18 @@ function verifyOTP(email, otp) {
 
 async function sendOTPEmail(email, otp, name) {
   console.log("📧 Sending OTP to:", email);
-  console.log("🔑 EMAIL_USER:", process.env.EMAIL_USER);
   console.log("✅ OTP is:", otp);
-  const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.BREVO_USER,
-      pass: process.env.BREVO_PASS
-    }
-  });
 
-  await transporter.sendMail({
-    from: `"Public Space" <${process.env.EMAIL_FROM}>`,
-    to: email,
+  const defaultClient = SibApiV3Sdk.ApiClient.instance;
+  defaultClient.authentications['api-key'].apiKey = process.env.BREVO_API_KEY;
+
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+  await apiInstance.sendTransacEmail({
+    sender: { email: process.env.EMAIL_FROM, name: "Public Space" },
+    to: [{ email }],
     subject: "Your Login OTP — Public Space",
-    html: `
+    htmlContent: `
       <div style="font-family:sans-serif;max-width:400px;margin:auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px;">
         <h2 style="color:#1d4ed8">🔐 Login Verification</h2>
         <p>Hi <strong>${name}</strong>,</p>
@@ -46,7 +41,7 @@ async function sendOTPEmail(email, otp, name) {
         <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#1d4ed8;padding:16px 0">${otp}</div>
         <p style="color:#6b7280;font-size:13px">Valid for <strong>5 minutes</strong>. Do not share it.</p>
       </div>
-    `,
+    `
   });
 }
 
