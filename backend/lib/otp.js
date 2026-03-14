@@ -25,20 +25,17 @@ async function sendOTPEmail(email, otp, name) {
   console.log("🔑 EMAIL_USER:", process.env.EMAIL_USER);
   console.log("✅ OTP is:", otp);
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "smtp-relay.brevo.com",
     port: 587,
     secure: false,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    },
-    tls: {
-      rejectUnauthorized: false
+      user: process.env.BREVO_USER,
+      pass: process.env.BREVO_PASS
     }
   });
 
   await transporter.sendMail({
-    from: `"Public Space" <${process.env.EMAIL_USER}>`,
+    from: `"Public Space" <${process.env.EMAIL_FROM}>`,
     to: email,
     subject: "Your Login OTP — Public Space",
     html: `
